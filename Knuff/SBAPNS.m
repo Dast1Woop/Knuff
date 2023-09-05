@@ -55,9 +55,9 @@
   
   request.HTTPBody = [NSJSONSerialization dataWithJSONObject:payload options:0 error:nil];
   
-  if (topic) {
-    [request addValue:topic forHTTPHeaderField:@"apns-topic"];
-  }
+    if (topic) {
+        [request addValue:topic forHTTPHeaderField:@"apns-topic"];
+    }
   
   if (collapseID.length > 0) {
     [request addValue:collapseID forHTTPHeaderField:@"apns-collapse-id"];
@@ -90,6 +90,7 @@
       
       // Not implemented?
 //      NSString *ID = r.allHeaderFields[@"apns-id"];
+        
       [self.delegate APNS:self didRecieveStatus:r.statusCode reason:reason forID:nil];
     }
   }];

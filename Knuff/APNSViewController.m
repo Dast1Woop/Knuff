@@ -57,7 +57,8 @@
 
 @property (weak) IBOutlet NSSegmentedControl *prioritySegmentedControl; // Only 5 and 10
 
-@property (weak) IBOutlet NSPopUpButton *topicsPopUpButton;
+@property (weak) IBOutlet NSTextField *bundleIDTextField;
+
 @property (weak) IBOutlet NSPopUpButton *payloadTypePopUpButton;
 
 @property (nonatomic) BOOL showSandbox; // current state of the UI
@@ -94,8 +95,8 @@
   
   [self devicesDidChange:YES];
     
-  [self.topicsPopUpButton removeAllItems];
-  self.topicsPopUpButton.enabled = NO;
+//  [self.topicsPopUpButton removeAllItems];
+//  self.topicsPopUpButton.enabled = NO;
 
   [self.payloadTypePopUpButton removeAllItems];
   [self.payloadTypePopUpButton addItemsWithTitles:APNSItemPushTypesAll()];
@@ -175,9 +176,9 @@
     [self setShowSandbox:(type == APNSSecIdentityTypeUniversal) animated:YES];
     
     NSArray *topics = APNSSecIdentityGetTopics(identity);
-    [self.topicsPopUpButton removeAllItems];
-    [self.topicsPopUpButton addItemsWithTitles:topics];
-    self.topicsPopUpButton.enabled = (topics.count > 0);
+//    [self.topicsPopUpButton removeAllItems];
+//    [self.topicsPopUpButton addItemsWithTitles:topics];
+//    self.topicsPopUpButton.enabled = (topics.count > 0);
       
     [self willChangeValueForKey:@"identityName"];
     [self.APNS setIdentity:identity];
@@ -209,7 +210,7 @@
 
     [self.APNS pushPayload:self.payload
                    toToken:[self preparedToken]
-                 withTopic:self.topicsPopUpButton.selectedItem.title
+                 withTopic:self.bundleIDTextField.stringValue
                   priority:self.document.priority
                 collapseID:self.document.collapseID
                payloadType:APNSItemPushTypeFromStr(self.payloadTypePopUpButton.selectedItem.title)
@@ -647,7 +648,9 @@
   }
   else if (notification.object == self.collapseIDTextField) {
     [self.document setCollapseID:self.collapseIDTextField.stringValue];
-  }
+  }else if (notification.object == self.bundleIDTextField) {
+      [self.document setBundleID:self.bundleIDTextField.stringValue];
+    }
 }
 
 #pragma mark - APNSDevicesViewControllerDelegate
